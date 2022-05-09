@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomeWork9</title>
+</head>
+<body>
+    <script>
+        const todo = {
+            list: [
+                {
+                    title: 'title_1',
+                    text: 'text_1',
+                    isComplete: 'false',
+                },
+                {
+                    title: 'title_2',
+                    text: 'text_2',
+                    isComplete: 'false',
+                },
+                {
+                    title: 'title_3',
+                    text: 'text_3',
+                    isComplete: 'false',
+                },
+            ],
+            add(title, text) {
+                if (title.trim() === 0 || text.trim() === 0) {
+                    return
+                }
+                const isUnique = this.checkUnique(title, text);
+                if (isUnique) {
+                    const note = {
+                        title,
+                        text,
+                        isComplete: false
+                    }
+                    this.list.push(note);
+                }
+            },
+            remove(title) {
+                const removeIndex = this.list.findIndex(note => note.title === title);
+                if (removeIndex !== -1) {
+                    this.list.splice(removeIndex, 1);
+                }
+            },
+            edit(title, newText, isComplete) {
+                const index = this.list.findIndex((todo) => todo.title === title);
+
+                if (index === -1) {
+                    return 'Todo is not found'
+                }
+
+                this.list[index].text = newText;
+                this.list[index].isComplete = isComplete;
+
+                return this.list
+            },
+            toggleComplete(title) {
+                const index = this.list.findIndex(note => note.title === title);
+
+                if (index !== -1) {
+                    this.list[index].isComplete = !this.list[index].isComplete;
+                }
+            },
+
+            checkUnique(title, text) {
+                return !this.list.find(note => note.title === title || note.text === text);
+            },
+
+            get statistic() {
+                return this.list.reduce((acc, note) => {
+                    if (note.isComplete) {
+                        acc.complete++
+                    } else {
+                        acc.uncomplete++
+                    }
+
+                    return acc
+                }, {
+                    total: this.list.length,
+                    complete: 0,
+                    uncomplete: 0
+                })
+            }
+        }
+
+        console.log(todo.edit('title_2', 'textTest', 'true'));
+
+        for (const key in todo) {
+            Object.defineProperty(todo, key, {
+                configurable: false
+            })
+        }
+    </script>
+</body>
+</html>
